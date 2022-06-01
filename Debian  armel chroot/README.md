@@ -28,7 +28,7 @@ mkdir ${IMAGE_NAME}
 sudo mount -o loop ${IMAGE_NAME}.img ${IMAGE_NAME}
 
 # first step of rootfs
-sudo debootstrap --verbose --include=less,openssh-server,wget --variant=minbase --arch=armel --foreign jessie ${IMAGE_NAME}  
+sudo debootstrap --verbose --include=less,openssh-server,locales,wget --variant=minbase --arch=armel --foreign jessie ${IMAGE_NAME}  
 
 # enter the chroot
 sudo mount -t proc proc ${IMAGE_NAME}/proc/
@@ -45,8 +45,10 @@ export DEBOOTSTRAP_DIR=/debootstrap
 echo 'LANG=en_US.UTF-8' >> /etc/profile
 echo 'LANGUAGE=en_US.UTF-8' >> /etc/profile
 echo 'LC_ALL=en_US.UTF-8' >> /etc/profile
+export LANGUAGE=en_US.UTF-8
+export LANG=en_US.UTF-8
+export LC_ALL=en_US.UTF-8
 
-apt install locales 
 dpkg-reconfigure locales
 ```
 
