@@ -10,8 +10,6 @@ TODO: look into grml-debootstrap (maybe simplifies things a little?)
 
 This is not a script, run these one block at a time.
 
-WARNING: not full tested
-
 ```bash
 # define name of image
 export IMAGE_NAME='jessie'
@@ -42,6 +40,8 @@ sudo chroot ${IMAGE_NAME} /usr/bin/qemu-arm-static /bin/bash --login
 export DEBOOTSTRAP_DIR=/debootstrap
 /debootstrap/debootstrap --second-stage 
 
+echo $(cat /etc/hostname)-chroot > /etc/hostname
+
 echo 'LANG=en_US.UTF-8' >> /etc/profile
 echo 'LANGUAGE=en_US.UTF-8' >> /etc/profile
 echo 'LC_ALL=en_US.UTF-8' >> /etc/profile
@@ -69,7 +69,22 @@ apt-get clean # may need this to recover some space if image is small
 
 ```
 
+# Starting chroot (on target)
+```bash
+export IMAGE_NAME='jessie'
+
+sudo mount -o loop ${IMAGE_NAME}.img ${IMAGE_NAME}
+
+sudo mount -t proc proc ${IMAGE_NAME}/proc/
+sudo mount --rbind /sys ${IMAGE_NAME}/sys/
+sudo mount --rbind /dev ${IMAGE_NAME}/dev/
+
+sudo chroot ${IMAGE_NAME} /bin/bash --login
+```
+
 # Shutting down chroot
+
+FIXME: this doesn't work properly.
 
 ```bash
 # exit and cleanup
@@ -80,4 +95,9 @@ sudo mount --make-rslave ${IMAGE_NAME}
 sudo umount -R ${IMAGE_NAME}
 sudo umount ${IMAGE_NAME}.img
 
+```
+
+# Make image file
+```bash
+gzip ${IMAGE_NAME}.img
 ```
