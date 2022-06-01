@@ -45,11 +45,18 @@ echo $(cat /etc/hostname)-chroot > /etc/hostname
 echo 'LANG=en_US.UTF-8' >> /etc/profile
 echo 'LANGUAGE=en_US.UTF-8' >> /etc/profile
 echo 'LC_ALL=en_US.UTF-8' >> /etc/profile
+locale-gen en_US.UTF-8 # not sure if needed
 export LANGUAGE=en_US.UTF-8
 export LANG=en_US.UTF-8
 export LC_ALL=en_US.UTF-8
 
 dpkg-reconfigure locales
+
+rm /usr/bin/qemu-arm-static # not needed on target
+
+# also need to set password with passwd
+# and configure ssh at /etc/ssh/sshd_config
+# e.g. enable PermitRootLogin yes
 ```
 
 # Installing ffmpeg
@@ -94,7 +101,6 @@ sudo mount --rbind /dev ${IMAGE_NAME}
 sudo mount --make-rslave ${IMAGE_NAME}
 sudo umount -R ${IMAGE_NAME}
 sudo umount ${IMAGE_NAME}.img
-
 ```
 
 # Make image file
