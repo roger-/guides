@@ -19,7 +19,7 @@ export IMAGE_SIZE=400 # MB
 
 # prerequisites
 sudo apt install debootstrap
-sudo apt install qemu-arm-static
+sudo apt install qemu-user-static
 
 # create and mount image
 dd if=/dev/zero of=${IMAGE_NAME}.img bs=1M count=$IMAGE_SIZE status=progress 
