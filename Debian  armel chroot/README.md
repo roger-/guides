@@ -28,7 +28,7 @@ mkdir ${IMAGE_NAME}
 sudo mount -o loop ${IMAGE_NAME}.img ${IMAGE_NAME}
 
 # first step of rootfs
-sudo debootstrap  --verbose --include=less,openssh-server,wget --variant=minbase --arch=armel --foreign ${IMAGE_NAME}  
+sudo debootstrap --verbose --include=less,openssh-server,wget --variant=minbase --arch=armel --foreign jessie ${IMAGE_NAME}  
 
 # enter the chroot
 sudo mount -t proc proc ${IMAGE_NAME}/proc/
