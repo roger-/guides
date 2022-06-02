@@ -62,6 +62,8 @@ rm /usr/bin/qemu-arm-static # not needed on target
 # Installing ffmpeg
 Debian Jessie unfortunately does not include ffmpeg, so we need to install it from another repo (within the chroot).
 
+NOTE: ffmpeg takes a long time to start on the target. Seems to be related to /dev/urandom?
+
 ```bash
 echo "deb http://archive.deb-multimedia.org/ jessie-backports main" > /tmp/multimedia.list
 echo "deb http://archive.deb-multimedia.org/ jessie main non-free"  >> /tmp/multimedia.list
@@ -74,19 +76,6 @@ apt update
 apt install ffmpeg
 apt-get clean # may need this to recover some space if image is small
 
-```
-
-# Starting chroot (on target)
-```bash
-export IMAGE_NAME='jessie'
-
-sudo mount -o loop ${IMAGE_NAME}.img ${IMAGE_NAME}
-
-sudo mount -t proc proc ${IMAGE_NAME}/proc/
-sudo mount --rbind /sys ${IMAGE_NAME}/sys/
-sudo mount --rbind /dev ${IMAGE_NAME}/dev/
-
-sudo chroot ${IMAGE_NAME} /bin/bash --login
 ```
 
 # Shutting down chroot
@@ -106,4 +95,17 @@ sudo umount ${IMAGE_NAME}.img
 # Make image file
 ```bash
 gzip ${IMAGE_NAME}.img
+```
+
+# Starting chroot (on target)
+```bash
+export IMAGE_NAME='jessie'
+
+sudo mount -o loop ${IMAGE_NAME}.img ${IMAGE_NAME}
+
+sudo mount -t proc proc ${IMAGE_NAME}/proc/
+sudo mount --rbind /sys ${IMAGE_NAME}/sys/
+sudo mount --rbind /dev ${IMAGE_NAME}/dev/
+
+sudo chroot ${IMAGE_NAME} /bin/bash --login
 ```
